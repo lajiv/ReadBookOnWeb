@@ -1,0 +1,11 @@
+﻿@using ReadOnline.Search.Model;
+
+@{
+    foreach (BookCatelogModel item in ViewBag.ListEntity)
+    {
+        <h2 style="text-align:center">@item.name</h2>
+        <div>
+            @item.BookContent
+        </div>
+    }
+}

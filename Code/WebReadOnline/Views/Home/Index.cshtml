@@ -1,0 +1,68 @@
+﻿@{
+    ViewBag.Title = "Home Page";
+}
+@using ReadOnline.Search.Model;
+<style>
+    .ZLtable ul li
+    {
+        margin:5px 0;
+        border:1px solid gray;
+    }
+    .ZLtable ul li a
+    {
+        float:right;
+        margin-left:10px;
+    }
+    .ZLnewsbox
+    {
+        width:400px;
+    }
+</style>
+<script>
+    function AddBook() {
+        layer.prompt({ title: '书名', formType: 3 }, function (bookname, index) {
+            layer.close(index);
+            $.ajax({
+                url: '@Url.Action("InsertBook")',
+                type: 'GET',
+                async: false,
+                data: { bookname: bookname},
+                success: function (backdata) {
+                    if (backdata == -1) {
+                        layer.msg('请检查书名');
+                    } else if (backdata == 0) {
+                        layer.msg('添加失败');
+                    } else {
+                        layer.msg('添加成功');
+                    }
+                   
+                },
+                error: function () {
+                    layer.msg("通信异常");
+                }
+            })
+        });
+    }
+    function EidtBook(bookid) {
+
+    }
+</script>
+<div>
+    <a href="javascript:AddBook();">添加书籍</a>
+</div>
+<div class="ZLtable">
+    <ul class="ZLnewsbox">
+        @if (ViewBag.bookList != null)
+        {
+            IList<BookModel> bookList = ViewBag.bookList;
+            foreach (BookModel item in bookList)
+            {
+        <li>
+            <span class="left">@item.BookName</span>
+            <a href="@Url.Action("Index","EditBook",new {area="EditBookModule",Bookid=item.Id })" target="_blank">编辑书籍</a>
+            <a href="@Url.Action("Index","ReadBook",new {area="ReadBookModule",Bookid=item.Id })" target="_blank">查看书籍</a>
+        </li>
+            }
+        }
+    </ul>
+</div>

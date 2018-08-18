@@ -1,0 +1,52 @@
+﻿
+@using ReadOnline.Search.Model
+<script>
+    function jumpContent(nodeId,keyvalue) {
+        var singleNode = zTree_Menu.getNodesByParam("id", nodeId, null);//返回一个数组
+        searchKeyWordsContent(singleNode[0], keyvalue);
+    }
+    function searchKeyWordsContent(treenode, keyvalue) {
+        var treeAry = [];
+        var rootNode = GetLevelNode(treenode);
+        getChildren(rootNode, treeAry);
+        var savedata = { "treeAry": treeAry, "keyvalue": keyvalue}
+        $.ajax({
+            type: "POST",
+            url: "@Html.Raw(Url.Action("GetKeyWordsContent", "ReadBook",new { area="ReadBookModule"}))",
+            data: JSON.stringify(savedata),
+            contentType: "application/json",
+            success: function (msg) {
+                msg = JSON.parse(msg)
+                $("#MainContent").html('');
+                for (var i = 0; i < msg.length; i++) {
+                    var title = '<h2 id="' + msg[i].id + '">' + msg[i].name + '</h2>';
+                    var maincontent = msg[i].BookContent == null ? '<div></div>' : '<div>' + msg[i].BookContent +'</div>';
+                    $("#MainContent").append(title).append(maincontent);
+                }
+                if (isclickFont == 1) {
+                    changeFont($("#J_input").val());
+                }
+                $("#pageConWrap").animate({
+                    scrollTop: $("#" + treenode.id).prop('offsetTop')
+                }, 'fast');
+            }
+        });
+        zTree_Menu.selectNode(treeAry[treeAry.length - 1]);
+        $("#currentNodeId").val(treeAry[treeAry.length - 1].tId);/*tid是树节点自动赋予的唯一值*/
+    }
+</script>
+
+@{
+    foreach (BookCatelogModel item in ViewBag.searchResult)
+    {
+        <dl class="readAllItems2Dl">
+            <dt>
+                <a href="javascript:jumpContent('@item.id','@ViewBag.KeyValue');">@Html.Raw(item.name)</a>
+            </dt>
+            <dt>
+            <dd>
+                <a href="javascript:jumpContent('@item.id','@ViewBag.KeyValue');">...@Html.Raw(item.BookContent)</a>
+            </dd>
+        </dl>
+    }
+}

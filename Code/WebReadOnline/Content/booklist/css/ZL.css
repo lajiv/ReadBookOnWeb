@@ -1,0 +1,486 @@
+﻿@charset "utf-8";
+html {
+  -webkit-tap-highlight-color: rgba(0, 0, 0, 0);
+  -webkit-text-size-adjust: none;
+}
+body {
+  font: 12px/1.5 'microsoft yahei', Verdana, Arial, Helvetica, sans-serif;
+  color: #5b5b5b;
+}
+* {
+  margin: 0;
+  padding: 0;
+}
+img {
+  width: 100%;
+  vertical-align: middle;
+  border: 0;
+}
+a {
+  color: #5b5b5b;
+  text-decoration: none;
+}
+a:hover {
+  color: #038bd5;
+  text-decoration:none;
+}
+li {
+  list-style: none;
+}
+
+/*字体库*/
+@font-face {
+  font-family: 'iconfont';
+  src: url('../iconfont/iconfont.eot');
+  src: url('../iconfont/iconfont.eot?#iefix') format('embedded-opentype'), url('../iconfont/iconfont.woff') format('woff'), url('../iconfont/iconfont.ttf') format('truetype'), url('../iconfont/iconfont.svg#iconfont') format('svg');
+}
+.iconfont {
+  font-family: "iconfont";
+  font-size: 20px;
+  font-style: normal;
+  -webkit-text-stroke-width: 0.2px;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+  color: #666;
+  line-height: 30px;
+  vertical-align: middle;
+}
+.left{
+  float:left;
+}
+.right{
+  float:right;
+}
+.Mright73{
+  margin-right:73px;
+}
+.Mbottom50{
+  margin-bottom:50px;
+}
+
+
+
+// 2017年08月21日
+// 中铝二级及详情页页面样式
+.ZLbread{
+  width:100%;
+  background-color:#f2f2f2;
+}
+.ZLcrumbs-con{
+  width:100%;
+  margin:10px 0 32px 0;
+  line-height:49px;
+  height:49px;
+  
+   background-color:#f2f2f2;
+}
+.ZLcrumbs-main{
+  width:1148px;
+  margin:0 auto;
+}
+.ZLcrumbs-main .left{
+  font-size:24px;
+  color:#0055a1;
+}
+.ZLcrumbs-main .right i{
+  display:inline-block;
+  margin:-2px 2px 0 0;
+  font-size:14px;
+  color:#de0a00;
+}
+.ZLcontent{
+  width:1148px;
+  margin:0 auto;
+  overflow:hidden;
+  padding-bottom:50px;
+}
+.ZLcontent .leftbox,.ZLcontent .ZLnews{
+  width:208px;
+  height:auto;
+  border:1px solid #ccc;
+  background-color:#efefef;
+}
+
+
+.ZLcontent .leftbox h5{
+  width:208px;
+  height:44px;
+  line-height:44px;
+  font-size:16px;
+  color:#fff;
+  background-color:#0055a1;
+  padding-left:20px;
+  box-sizing:border-box;
+}
+.ZLcontent .leftbox ul{
+  padding-top:10px;
+  padding-left:15px;
+  box-sizing:border-box;
+}
+.ZLcontent .leftbox ul li,.ZLcontent .ZLnews ul li{
+
+  height:40px;
+  border-bottom:1px solid #e4e4e4;
+  font-size:14px;
+  cursor:pointer;
+  padding-left:20px;
+  line-height: 40px;
+  color:#028cd7;
+ background:url(../images/selectbg.png)left center no-repeat;
+ background:url(../images/selectbg.png) left center no-repeat\9;
+ 
+}
+.ZLcontent .ZLnews{
+  float:left;
+  height:auto;
+  min-height:800px;
+  background-color:#efefef;
+ position:relative;
+}
+.ZLnews .leftBG{
+  position:absolute;
+  left:0;
+  bottom:0;
+  width:208px;height:174px;
+  background:url(../images/leftboxbg.jpg)no-repeat;
+  background:url(../images/leftboxbg.jpg) no-repeat\9;
+}
+.ZLcontent .ZLnews ul{
+ padding-top:20px;
+}
+.ZLcontent .ZLnews ul li{
+background:none;
+color:#464646;
+border-bottom:1px dashed #e4e4e4;
+}
+.ZLcontent .ZLnews ul li:hover,.ZLcontent .ZLnews ul li:hover i{
+color:#028cd7;
+}
+.ZLcontent .leftbox ul li.check-current{
+  
+ background:url(../images/selectbgs.png)left center no-repeat;
+ background:url(../images/selectbgs.png) left center no-repeat\9;
+}
+.ZLcontent .ZLnews ul li.news-current{
+  background-color:#0055a1;
+  border-left:5px solid #ff8010;
+  color:#fff;
+  padding-left:15px;
+  border-bottom:0;
+}
+.ZLcontent .ZLnews ul li.news-current i{
+
+  color:#fff;
+}
+.ZLcontent .leftbox .checktab{
+  height:40px;
+  line-height:40px;
+}
+.ZLcontent .leftbox .checktab span{
+  cursor:pointer;
+  dispaly:inline-block;
+  margin:0 10px 0 20px;
+}
+.ZLcontent .leftbox .checktab span:hover{
+  color:#028cd7;
+}
+.ZLcontent .rightbox{
+  width:896px;
+  height:auto;
+  padding-top:40px;
+}
+
+.handle i{
+  width:25px;
+  text-align:center;
+  font-size:16px;
+  color:#0055a1;
+  cursor:pointer;
+}
+.ZLsearch-main .seldiv{
+  width:108px;
+  float:left;
+  background-color:#fff;
+  position:relative;
+}
+.ZLsearch-main .seldiv .seldiv-big{
+  width:108px;
+  height:30px;
+  height:29px\9;
+  line-height:30px;
+  float:left;
+  border:1px solid #ccc;
+  border-right:0;
+  border-right:1px solid #ccc\9;
+  cursor:pointer;
+  background:url(../images/selrbg.jpg)right no-repeat;
+  background:url(../images/selrbg.jpg) right no-repeat\9;
+  padding-left:10px;
+  box-sizing:border-box;
+  position:relative;
+}
+.ZLsearch-main .seldiv .seldiv-big:after{
+    content: "";
+    position: absolute;
+    top:11px;
+    right:3px;
+    border: 5px solid #fff;
+    border-color:#ccc transparent transparent  transparent;
+}
+.ZLsearch-tab .ZLsearch-main .seldiv ol{
+  width:106px;
+  position:absolute;
+  left:0;
+  top:30px;
+  border:1px solid #ccc;
+  border-top:0;
+  display:none;
+}
+.ZLsearch-tab .ZLsearch-main .seldiv ol li{
+  width:106px;
+  height:25px;
+  line-height:25px;
+  background-color:#fff;
+  text-align:left;
+  padding-left:10px;
+  box-sizing:border-box;
+}
+.ZLsearch-tab .ZLsearch-main .seldiv ol li:hover{
+  
+  background-color:#f5f5f5;
+}
+.ZLsearch-main input{
+  width:355px;
+  height:28px;
+  border:0;
+  float:left;
+  border:1px solid #ccc;
+  margin:0 6px;
+  padding-left:5px;
+}
+.search-button{
+  float:left;
+  width:84px;
+  height:30px;
+  background-color:#0055a1;
+  color:#fff;
+  text-align:center;
+  line-height:30px;
+  font-size:14px;
+  margin:0 10px;
+  cursor:pointer;
+}
+.search-button:hover{
+  background-color:#024e92;
+}
+.ZLsearch-main a{
+  line-height: 30px;
+}
+.ZLsearch-data{
+  margin:10px 0;
+  height:40px;
+  border:1px solid #ccc;
+}
+.ZLsearch-data span{
+  display:block;
+  float:right;
+  margin-right:30px;
+  line-height:40px;
+}
+.ZLtable{
+  width:100%;
+}
+.ZLtable table{
+  width:100%;  
+}
+.ZLtable table thead{
+background-color:#efefef;
+border:1px solid #ccc;
+border-width: 1px;
+}
+.ZLtable table tr{
+  height:40px;
+}
+.ZLtable table tr.ZL{
+  height:60px;
+  border-bottom:1px solid #efefef;
+}
+.ZLtable table tr.ZL td{
+text-align:center;
+border: 1px solid #ccc;
+border-width: 1px;
+}
+.ZLtable table tr.ZL td{
+text-align:center;
+border: 1px solid #efefef;
+border-width: 0px 0px 1px 0px;
+}
+.ZLpage{
+  width:700px;
+  margin:10px auto;
+  height:auto;
+  margin-top:30px;
+}
+
+.ZLpage ul li{
+  float:left;
+  margin:0 5px;
+  position:relative;
+}
+.ZLpage ul li a{
+  display:block;
+  padding:2px 8px;
+  border:1px solid #ccc;
+}
+.ZLpage ul li a:hover{
+  border:1px solid #0055a1;
+}
+.ZLpage ul li.pagecurrent a{
+  background-color:#0055a1;
+  color:#fff;
+  border:1px solid #0055a1;
+}
+.ZLpage .skip{
+  line-height:23px;
+}
+.skipdiv{
+  padding:2px 40px 2px 10px;
+  border:1px solid #ccc;
+  border-right:0;
+  cursor:pointer;
+  background:url(../images/selrbg.jpg)right no-repeat;
+  background:url(../images/selrbg.jpg) right no-repeat\9;
+  position:relative;
+  
+}
+.skipdiv ol{
+  width:56px;
+  height:auto;
+  position:absolute;
+  left:-1px;
+  top:22px;
+  border:1px solid #ccc;
+  display:none;
+}
+.skipdiv ol li{
+  width:100%;
+ line-height:20px;
+ float:none;
+ margin:0;
+}
+.skipdiv ol li:hover{
+ background-color:#f5f5f5;
+ 
+}
+.ZLsearch-news{
+  border-bottom:1px solid #ccc;
+  overflow:hidden;
+  margin-top: -40px;
+  padding-bottom:10px;
+}
+.ZLsearch-news .title{
+  float:left;
+  font-size:18px;
+  color:#3b3b3b;
+}
+.ZLsearch-news .searchbox{
+  float:right;
+}
+.ZLsearch-news .searchbox input{
+  width:236px;
+  height:30px;
+  border:1px solid #ccc;
+  margin-right:5px;
+  padding-left:5px;
+  box-sizing:border-box;
+  vertical-align:middle;
+}
+.ZLsearch-news .searchbox span{
+  display:inline-block;
+  width:30px;
+  height:30px;
+  background-color:#0055a1;
+  text-align:center;
+  line-height:30px;
+  vertical-align:middle;
+}
+.ZLsearch-news .searchbox span i{
+  color:#fff;
+}
+.ZLnewsbox{
+  padding-top:20px;
+}
+.ZLnewsbox li{
+  height:35px;
+  line-height:35px;
+  border-bottom:1px solid #efefef;
+}
+.ZLnewsbox li a i{
+  display:block;
+  width:30px;
+ vertical-align:middle;
+ font-size: 14px;
+ line-height: 35px;
+ text-align:center;
+}
+.ZLnewsbox li a:hover i{
+ color:#028cd7;
+}
+.ZLnewsbox li a span,.ZLnewsbox li a em{
+ display:block;
+ width:100px;
+ text-align:right;
+ font-style:normal;
+}
+.ZLnewsbox li a span{
+ display:block;
+ width:766px;
+ text-align:left;
+ text-overflow: ellipsis;
+  white-space: nowrap;
+  overflow: hidden;
+}
+.ZLabout{
+  padding-top:20px;
+  overflow:hidden;
+}
+.ZLabout img{
+  width:352px;
+  height:230px;
+  margin:0 20px 20px 0;
+}
+.ZLabout p,.ZLabout-con{
+  width:524px;
+  font-size:14px;
+  line-height:30px;
+}
+.clear{
+  clear:both;
+}
+.ZLabout p.ZLabout-con{
+  width:100%;
+}
+.ZLnews-detail{
+  margin-bottom:20px;
+}
+.ZLnews-detail h2{
+  font-size:18px;
+  text-align:center;
+}
+.newstime{
+  width:100%;
+  padding-right:300px;
+  box-sizing:border-box;
+  text-align:right;
+  margin:20px 0;
+}
+.newstime i{
+  color:#de0a00;
+  margin-right:20px;
+  font-style:normal;
+}
+.ZLnews-detail p{
+  line-height:30px;
+   text-indent:2em;
+   margin:10px 0;
+}

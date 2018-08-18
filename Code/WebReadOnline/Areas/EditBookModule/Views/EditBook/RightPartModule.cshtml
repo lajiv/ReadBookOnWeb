@@ -1,0 +1,73 @@
+﻿
+@using (Ajax.BeginForm("AddCatelog", new { }, new AjaxOptions()
+{
+    HttpMethod = "post",
+    InsertionMode = InsertionMode.Replace,
+    OnSuccess = "Reload(data)"
+}, new { @class = "form form-h form-h-8em", id = "searchForm" }))
+{
+    <script>
+        function Reload(data) {
+            debugger;
+                    if (data != 0) {
+                        alert("保存成功！");
+                        location.reload();
+                    } else {
+                        alert("失败,请检查后重试！");
+                    }
+
+                }
+    </script>
+    <div class="formItem clearfix">
+        <span class="itemTit fl">上级标题</span>
+        <div class="itemCon fl">
+            <input type="text" name="ParentName" id="ParentName" class="inputTxt" readonly="readonly" placeholder="请选择上级标题" />
+            <input type="button" class="clearBtn" onclick="clearTitle()" value="清空" />
+            <script>
+                        //清除父级标题
+                        function clearTitle() {
+                            $("#ParentName").attr("value", "");
+                            $("#pId").attr("value", "");
+                        }
+            </script>
+            <div class="itemTree">
+                <ul id="rightTree" class="ztree" style="width:300px"></ul>
+            </div>
+        </div>
+    </div>
+    <div class="formItem clearfix">
+        <span class="itemTit fl">标题</span>
+        <div class="itemCon fl">
+            <input type="text" name="booktitle" id="booktitle" class="inputTxt" placeholder="请输入标题" />
+        </div>
+    </div>
+    <div class="formItem clearfix">
+        <span class="itemTit fl">内容</span>
+        <div class="itemCon fl">
+            <script id="container" name="content" type="text/plain">
+            </script>
+            <!-- 配置文件 -->
+            <script type="text/javascript" src="~/Content/ueditor/ueditor.config.js"></script>
+            <!-- 编辑器源码文件 -->
+            <script type="text/javascript" src="~/Content/ueditor/ueditor.all.js"></script>
+            <!-- 实例化编辑器 -->
+            <script type="text/javascript">
+                        var ue = UE.getEditor('container');
+            </script>
+        </div>
+    </div>
+    <div class="formItem clearfix">
+        <span class="itemTit fl">排序</span>
+        <div class="itemCon fl">
+            <input type="number" min="0" name="sort" id="sort" class="inputTxt" placeholder="请输入或者选择序号" style="width:30%;" />
+        </div>
+    </div>
+    <div class="formItem formItemBtn clearfix">
+        <span class="itemTit fl"></span>
+        <div class="itemCon fl">
+            <input type="submit" value="保存" />
+        </div>
+    </div>
+    <input type="hidden" id="Bookid" name="Bookid" value="@ViewBag.Bookid" />
+    <input type="hidden" id="pId" name="pId" />
+}

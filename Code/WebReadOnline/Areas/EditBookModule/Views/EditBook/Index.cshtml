@@ -1,0 +1,251 @@
+﻿
+@{
+    ViewBag.Title = "Index";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+<style type="text/css">
+    /*.ztreeBoxWrap,.ztreeBoxWrap *{ margin:0; padding:0;}*/
+    .clearfix:after, .clearfix:before {
+        display: table;
+        content: "";
+        height: 0;
+        clear: both;
+        visibility: hidden;
+    }
+
+    .fl {
+        float: left;
+    }
+
+    .fr {
+        float: right;
+    }
+
+    .ztreeBoxWrap {
+        width: 1130px;
+        min-height: 500px;
+        margin: 20px auto;
+        font-size: 16px;
+        font-family: Microsoft Yahei;
+        color: #333;
+        background-color: white;
+    }
+
+    .ztreeBoxLeft, .ztreeBoxRight {
+        width: 30%;
+        height: 100%;
+        min-height: 500px;
+        padding: 10px;
+        box-sizing: border-box;
+        border: 1px solid #ccc;
+    }
+
+    .ztreeBoxRight {
+        width: 68%;
+    }
+
+        .ztreeBoxRight .formItem {
+            margin-bottom: 10px;
+        }
+
+            .ztreeBoxRight .formItem .itemTit {
+                width: 13%;
+                height: 36px;
+                line-height: 36px;
+            }
+
+            .ztreeBoxRight .formItem .itemCon {
+                width: 85%;
+                position: relative;
+            }
+
+                .ztreeBoxRight .formItem .itemCon input {
+                    height: 34px;
+                    border: 1px solid #dedede;
+                    padding: 0 10px;
+                    width: 85%;
+                    background: #f3f3f3;
+                    box-sizing: border-box;
+                }
+
+                    .ztreeBoxRight .formItem .itemCon input.clearBtn {
+                        width: 10%;
+                        cursor: pointer;
+                    }
+
+                .ztreeBoxRight .formItem .itemCon .itemTree {
+                    position: absolute;
+                    top: 36px;
+                    left: 0;
+                    padding: 5px;
+                    border: 1px solid #dedede;
+                    background: #fff;
+                    display: none;
+                    z-index: 9;
+                }
+
+        .ztreeBoxRight .formItemBtn {
+            text-align: center;
+            padding: 20px 0;
+        }
+
+            .ztreeBoxRight .formItemBtn .itemCon input {
+                width: auto;
+                cursor: pointer;
+                padding: 0 20px;
+                margin: 0 10px;
+            }
+
+                .ztreeBoxRight .formItemBtn .itemCon input:hover, .ztreeBoxRight .formItem .itemCon input.clearBtn:hover {
+                    border: 1px solid #ccc;
+                    background: #dedede;
+                }
+</style>
+<link rel="stylesheet" href="~/Content/ztree/css/demo.css" type="text/css">
+<link rel="stylesheet" href="~/Content/ztree/css/zTreeStyle/zTreeStyle.css" type="text/css">
+<script type="text/javascript" src="~/Content/ztree/js/jquery.ztree.core.js"></script>
+<script type="text/javascript" src="~/Content/ztree/js/jquery.ztree.excheck.js"></script>
+<script type="text/javascript" src="~/Content/ztree/js/jquery.ztree.exedit.js"></script>
+<script type="text/javascript">
+    $(function () {
+        $('.ztreeBoxRight .formItem .itemCon input:first').click(function (e) {
+            $(this).siblings('.itemTree').toggle();
+        });
+          var leftsetting = {
+            async: {
+                enable: true,
+                url:'@Html.Raw(Url.Action("GetCatelogTree", "EditBook",new { area="EditBookModule"}))',
+                otherParam: { "bookId": '@ViewBag.Bookid'}
+            },
+            edit: {
+                drag: false,
+                enable: true
+            },
+            view: {
+                dblClickExpand: false,
+                showLine: true,
+                selectedMulti: false
+            },
+            data: {
+                simpleData: {
+                    enable: true,
+                    idKey: "id",
+                    pIdKey: "pId",
+                    rootPId: ""
+                }
+            },
+            callback: {
+                onRename: onRename,
+                beforeRemove: beforeRemove,
+                onRemove: onRemove,
+                onAsyncSuccess: onLeftAsyncSuccess,
+
+            }
+        };
+        var rightsetting = {
+            async: {
+                enable: true,
+                url:'@Html.Raw(Url.Action("GetCatelogTree", "EditBook",new { area="EditBookModule"}))',
+                otherParam: { "bookId": '@ViewBag.Bookid'}
+            },
+            view: {
+                dblClickExpand: false,
+                showLine: true,
+                selectedMulti: false
+            },
+            data: {
+                simpleData: {
+                    enable: true,
+                    idKey: "id",
+                    pIdKey: "pId",
+                    rootPId: ""
+                }
+            },
+            callback: {
+                onClick: TreeSClick
+            }
+        };
+        $.fn.zTree.init($("#leftTree"), leftsetting);
+        $.fn.zTree.init($("#rightTree"), rightsetting);
+        var zTree = $.fn.zTree.getZTreeObj("leftTree");
+        zTree.expandAll(true);
+            //选择父级标题
+        function TreeSClick() {
+          var zTree = $.fn.zTree.getZTreeObj("rightTree");
+          var nodes = zTree.getSelectedNodes();
+          $("#ParentName").attr("value", nodes[0].name);
+          $("#pId").attr("value", nodes[0].id);
+        }
+         //重命名
+        function onRename(e, treeId, treeNode, isCancel) {
+             $.ajax({
+                 type: "GET",
+                 url: "@Html.Raw(Url.Action("EditNodeName", "EditBook",new { area="EditBookModule"}))",
+                 data: {"NewNodeName": treeNode.name, "Id": treeNode.id },
+                 success: function (msg) {
+                     if (msg != "0") {
+                         $.fn.zTree.init($("#rightTree"), rightsetting);
+                         alert("保存成功");
+                     }
+                     else
+                     {
+                         alert("更新失败");
+                       return false;
+                     }
+                 },
+                 error: function (e) {
+                     debugger;
+                     alert("通信出现错误，请稍后重试");
+                       return false;
+                 }
+           })
+        }
+        //在移除节点之前
+        function beforeRemove(treeId, treeNode) {
+            var zTree = $.fn.zTree.getZTreeObj("leftTree");
+            zTree.selectNode(treeNode);
+            return confirm("您确认要删除" + treeNode.name + "吗");
+        }
+        //移除节点触发功能
+        function onRemove(e, treeId, treeNode, isCancel) {
+             $.ajax({
+                 type: "GET",
+                 url: "@Html.Raw(Url.Action("DeleteNode", "EditBook",new { area="EditBookModule"}))",
+                 data: {"Id": treeNode.id },
+                 success: function (msg) {
+                     debugger;
+                     if (msg != "0") {
+                         messageAlert("删除成功");
+                         $.fn.zTree.init($("#rightTree"), rightsetting);
+                     }
+                     else
+                     {
+                       messageAlert("删除失败");
+                       return false;
+                     }
+                 },
+                 error: function (e) {
+                       messageAlert("通信出现错误，请稍后重试");
+                       return false;
+                 }
+           })
+        }
+        //展开左边树
+        function onLeftAsyncSuccess(event, treeId, treeNode, msg) {
+            var zTree = $.fn.zTree.getZTreeObj("leftTree");
+            zTree.expandAll(true);
+        }
+    })
+</script>
+
+<div class="ztreeBoxWrap clearfix">
+    <div class="ztreeBoxLeft fl">
+        @{Html.RenderPartial("~/Areas/EditBookModule/Views/EditBook/LeftPartModule.cshtml");}
+    </div>
+    <div class="ztreeBoxRight fr">
+        @{Html.RenderPartial("~/Areas/EditBookModule/Views/EditBook/RightPartModule.cshtml");}
+    </div>
+</div>
+
+

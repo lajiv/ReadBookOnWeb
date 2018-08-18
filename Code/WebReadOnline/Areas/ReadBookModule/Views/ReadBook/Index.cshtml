@@ -1,0 +1,486 @@
+﻿
+@{
+    ViewBag.Title = "Index";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+<link rel="stylesheet" href="~/Css/zyycyStyle.css" type="text/css" />
+<link rel="stylesheet" href="~/Content/ztree/css/demo.css" type="text/css">
+<link rel="stylesheet" href="~/Content/ztree/css/zTreeStyle/zTreeStyle.css" type="text/css">
+<style type="text/css">
+    .ztree * {
+        font-size: 12pt;
+        font-family: "Microsoft Yahei",Verdana,Simsun,"Segoe UI Web Light","Segoe UI Light","Segoe UI Web Regular","Segoe UI","Segoe UI Symbol","Helvetica Neue",Arial
+    }
+
+    .ztree li ul {
+        margin: 0;
+        padding: 0
+    }
+
+    .ztree li {
+        line-height: 30px;
+    }
+
+        .ztree li a {
+            width: 200px;
+            height: 30px;
+            padding-top: 0px;
+        }
+
+            .ztree li a:hover {
+                text-decoration: none;
+                background-color: #E7E7E7;
+            }
+
+            .ztree li a span.button.switch {
+                visibility: hidden
+            }
+
+    .ztree.showIcon li a span.button.switch {
+        visibility: visible
+    }
+
+    .ztree li a.curSelectedNode {
+        background-color: #D4D4D4;
+        border: 0;
+        height: 30px;
+    }
+
+    .ztree li span {
+        line-height: 30px;
+    }
+
+        .ztree li span.button {
+            margin-top: -7px;
+        }
+
+            .ztree li span.button.switch {
+                width: 16px;
+                height: 16px;
+            }
+
+    .ztree li a.level0 span {
+        font-size: 150%;
+        font-weight: bold;
+    }
+
+    .ztree li span.button {
+        background-image: url("../../Content/ztree/css/zTreeStyle/img/left_menuForOutLook.png");
+        *background-image: url("../../Content/ztree/css/zTreeStyle/img/left_menuForOutLook.gif")
+    }
+
+        .ztree li span.button.switch.level0 {
+            width: 20px;
+            height: 20px
+        }
+
+        .ztree li span.button.switch.level1 {
+            width: 20px;
+            height: 20px
+        }
+
+        .ztree li span.button.noline_open {
+            background-position: 0 0;
+        }
+
+        .ztree li span.button.noline_close {
+            background-position: -18px 0;
+        }
+
+        .ztree li span.button.noline_open.level0 {
+            background-position: 0 -18px;
+        }
+
+        .ztree li span.button.noline_close.level0 {
+            background-position: -18px -18px;
+        }
+
+    #searchTitle {
+        overflow-y: scroll;
+    }
+
+    .pageReadCon, .pageReadCon p, .pageReadCon p span {
+        /*font-size:16px;*/
+        line-height: 150%;
+    }
+</style>
+<script type="text/javascript" src="~/Content/ztree/js/jquery.ztree.core.js"></script>
+
+<SCRIPT type="text/javascript">
+
+    var TreeArray = [];
+    $.fn.iVaryVal = function (iSet, CallBack) {
+        /*
+         * Minus:点击元素--减小
+         * Add:点击元素--增加
+         * Input:表单元素
+         * Min:表单的最小值，非负整数
+         * Max:表单的最大值，正整数
+         */
+        iSet = $.extend({ Minus: $('.J_minus'), Add: $('.J_add'), Input: $('.J_input'), Min: 12, Max: 30 }, iSet);
+        var C = null, O = null;
+        //插件返回值
+        var $CB = {};
+        //增加
+        iSet.Add.each(function (i) {
+            $(this).click(function () {
+                O = parseInt(iSet.Input.eq(i).val());
+                (O + 1 <= iSet.Max) || (iSet.Max == null) ? iSet.Input.eq(i).val(O + 1) : iSet.Input.eq(i).val(iSet.Max);
+                //输出当前改变后的值
+                $CB.val = iSet.Input.eq(i).val();
+                $CB.index = i;
+                //回调函数
+                if (typeof CallBack == 'function') {
+                    CallBack($CB.val, $CB.index);
+                }
+            });
+        });
+        //减少
+        iSet.Minus.each(function (i) {
+            $(this).click(function () {
+                O = parseInt(iSet.Input.eq(i).val());
+                O - 1 < iSet.Min ? iSet.Input.eq(i).val(iSet.Min) : iSet.Input.eq(i).val(O - 1);
+                $CB.val = iSet.Input.eq(i).val();
+                $CB.index = i;
+                //回调函数
+                if (typeof CallBack == 'function') {
+                    CallBack($CB.val, $CB.index);
+                }
+            });
+        });
+        //手动
+        iSet.Input.bind({
+            'click': function () {
+                O = parseInt($(this).val());
+                $(this).select();
+            },
+            'keyup': function (e) {
+                if ($(this).val() != '') {
+                    C = parseInt($(this).val());
+                    //非负整数判断
+                    if (/^[1-9]\d*|0$/.test(C)) {
+                        $(this).val(C);
+                        O = C;
+                    } else {
+                        $(this).val(O);
+                    }
+                }
+                //键盘控制：上右--加，下左--减
+                if (e.keyCode == 38 || e.keyCode == 39) {
+                    iSet.Add.eq(iSet.Input.index(this)).click();
+                }
+                if (e.keyCode == 37 || e.keyCode == 40) {
+                    iSet.Minus.eq(iSet.Input.index(this)).click();
+                }
+                //输出当前改变后的值
+                $CB.val = $(this).val();
+                $CB.index = iSet.Input.index(this);
+                //回调函数
+                if (typeof CallBack == 'function') {
+                    CallBack($CB.val, $CB.index);
+                }
+            },
+            'blur': function () {
+                $(this).trigger('keyup');
+                if ($(this).val() == '') {
+                    $(this).val(O);
+                }
+                //判断输入值是否超出最大最小值
+                if (iSet.Max) {
+                    if (O > iSet.Max) {
+                        $(this).val(iSet.Max);
+                    }
+                }
+                if (O < iSet.Min) {
+                    $(this).val(iSet.Min);
+                }
+                //输出当前改变后的值
+                $CB.val = $(this).val();
+                $CB.index = iSet.Input.index(this);
+                //回调函数
+                if (typeof CallBack == 'function') {
+                    CallBack($CB.val, $CB.index);
+                }
+            }
+        });
+    }
+    function changeFont(value) {
+        $('.pageReadCon').css('font-size', value + 'px');
+        $('.pageReadCon p').css('font - size', value + 'px');
+        $('.pageReadCon p span').css('font-size', value + 'px');
+    }
+    /**
+     * ZTREE方法开始
+     */
+    var curMenu = null, zTree_Menu = null;
+    var setting = {
+        view: {
+            showLine: false,
+            showIcon: false,
+            selectedMulti: false,
+            dblClickExpand: false,
+            addDiyDom: addDiyDom
+        },
+        data: {
+            simpleData: {
+                enable: true,
+                idKey: "id",
+                pIdKey: "pId",
+                rootPId: ""
+            }
+        },
+        callback: {
+            onClick: onTreeClick
+        }
+    };
+    /**
+     * 左侧展开样式
+     */
+    function addDiyDom(treeId, treeNode) {
+        var spaceWidth = 5;
+        var switchObj = $("#" + treeNode.tId + "_switch"),
+            icoObj = $("#" + treeNode.tId + "_ico");
+        switchObj.remove();
+        icoObj.before(switchObj);
+
+        if (treeNode.level > 1) {
+            var spaceStr = "<span style='display: inline-block;width:" + (spaceWidth * treeNode.level) + "px'></span>";
+            switchObj.before(spaceStr);
+        }
+    }
+    /**
+     * 遍历获得最外层(即叶子节点)第一个叶子结点
+     */
+    function getChildren(treeNode, treeAry) {
+        treeAry.push(treeNode);
+        if (treeNode != undefined && treeNode.isParent) {
+            treeNode = getChildren(treeNode.children[0], treeAry);
+        }
+        return treeNode;
+    }
+    /**
+     * 遍历获得最外层(即叶子节点)最后一个叶子结点
+     */
+    function getLastChildren(treeNode) {
+        if (treeNode.isParent) {
+            treeNode = getLastChildren(treeNode.children[treeNode.children.length-1]);
+        }
+        return treeNode;
+    }
+    /**
+     * 如何到一个分支最低端，然后去下一个分支的第一个
+     */
+    function getLastNodeCrossLevel(treenode) {
+        if (treenode.getNextNode()) {
+            return treenode.getNextNode();
+        } else {
+            treenode = getLastNodeCrossLevel(treenode.getParentNode());
+            return treenode;
+        }
+    }
+    /**
+    * 如何到一个分支最低端，然后去下一个分支的最后一个
+    */
+    function getFirstNodeCrossLevel(treenode) {
+        if (treenode.getPreNode()) {
+            return treenode.getPreNode();
+        } else {
+            treenode = getFirstNodeCrossLevel(treenode.getParentNode());
+            return treenode;
+        }
+    }
+    /**
+     * 获取右侧内容
+     */
+    function searchContent(treeAry) {
+        $("#MainContent").html('');
+        if (treeAry[0] != undefined) {
+        for (var i = 0; i < treeAry.length; i++) {
+            var title = '<h2 style="text-align:center">' + treeAry[i].name + '</h2>';
+            var maincontent = '<div>' + treeAry[i].BookContent + '</div>';
+            $("#MainContent").append(title).append(maincontent);
+        }
+        if (isclickFont == 1) {
+            changeFont($("#J_input").val());
+        }
+            $("#currentNodeId").val(treeAry[treeAry.length - 1].tId);/*tid是树节点自动赋予的唯一值*/
+        }
+    }
+
+    $(function () {
+        isclickFont = 0;//判断是否点击了字体变换按钮
+        var treeObj = $("#readBookTree");
+        $.fn.zTree.init(treeObj, setting,@Html.Raw(ViewBag.bookTreeList));
+        zTree_Menu = $.fn.zTree.getZTreeObj("readBookTree");
+        zTree_Menu.expandAll(true);
+        treeObj.hover(function ()
+        {
+            if (!treeObj.hasClass("showIcon")) {
+                treeObj.addClass("showIcon");
+            }
+        }, function () {
+            treeObj.removeClass("showIcon");
+            }
+        );
+        if (zTree_Menu != null) {
+            var treeAry = [];
+            firstNode = getChildren(zTree_Menu.getNodes()[0], treeAry);
+            searchContent(treeAry);
+        }
+        //设置左侧切换
+        $('.readAllUl li').click(function (e) {
+            $(this).addClass('curReadLi').siblings().removeClass('curReadLi');
+            $('.readAllItems').eq($(this).index()).show().siblings().hide();
+            $('.cyyzy_readAll_wrap').removeClass('cyyzy_readAll_wrap_noLeft');
+        });
+
+        //隐藏显示目录模块
+        $('.toggleAside').click(function (e) {
+            $('.cyyzy_readAll_wrap').toggleClass('cyyzy_readAll_wrap_noLeft');
+            $('.readAllUl li').removeClass('curReadLi');
+        });
+        $('.readAllItems4').iVaryVal({}, function (value, index) {
+            /*$('.readAllItems4').html('你点击的表单索引是：'+index+'；改变后的表单值是：'+value);*/
+            isclickFont = 1;
+            changeFont(value);
+        });
+    });
+    /**
+     * 左侧树点击事件
+     */
+    function onTreeClick(event, treeId, treeNode, clickFlag) {
+        var treeAry = [];
+        var rootNode = GetLevelNode(treeNode);
+        getChildren(rootNode, treeAry);
+        searchContent(treeAry);
+    }
+    /**
+     * 如选中一节点，则获取这个节点根部(递归)
+     */
+    function GetLevelNode(treeNode) {
+        var nodeIndex = zTree_Menu.getNodeIndex(treeNode);
+        if (nodeIndex == 0 && treeNode.getParentNode()) {
+            treeNode = GetLevelNode(treeNode.getParentNode());
+        }
+        return treeNode;
+    }
+    /**
+     * 搜索关键词
+     */
+    function searchWords() {
+        var keyvalue = $("#KeyValue").val();
+        $.ajax({
+             type: "GET",
+             url: "@Html.Raw(Url.Action("GetSearchResult", "ReadBook",new { area="ReadBookModule"}))",
+             data: { keyValue: keyvalue, bookid:'@ViewBag.Bookid'},
+             success: function (msg) {
+                 $("#searchTitle").html(msg);
+             }
+         });
+    }
+    /**
+     * 获得上一节
+     */
+    function ZYgetPreNode() {
+        var prenode;
+        var rootNode;
+        var treeAry = [];
+        var currentId = $("#currentNodeId").val();
+        var treeObj = $.fn.zTree.getZTreeObj("readBookTree");
+        var node = treeObj.getNodeByTId(currentId);
+        if (!node.getPreNode()) {
+            if (node.getParentNode() && node.getParentNode().getPreNode()) {
+                prenode = getLastChildren(node.getParentNode().getPreNode());
+                rootNode = GetLevelNode(prenode);
+                getChildren(rootNode, treeAry);
+                searchContent(treeAry);
+            } else if (node.getParentNode() && !node.getParentNode().getPreNode() && node.getParentNode().level != 0) {
+                rootNode = GetLevelNode(getFirstNodeCrossLevel(node.getParentNode()));
+                prenode = getChildren(rootNode, treeAry);
+                searchContent(treeAry);
+            }else {
+                return;
+            }
+        } else {
+            prenode=getLastChildren(node.getPreNode())
+            rootNode = GetLevelNode(prenode);
+            prenode = getChildren(rootNode, treeAry);
+            searchContent(treeAry);
+        }
+        zTree_Menu.selectNode(prenode);
+    }
+    /**
+     * 获取下一节
+     */
+    function ZYgetNextNode() {
+        var treeAry = [];
+        var nextNode;
+        var rootNode;
+        var currentId = $("#currentNodeId").val();
+        var treeObj = $.fn.zTree.getZTreeObj("readBookTree");
+        var node = treeObj.getNodeByTId(currentId);
+        if (!node.getNextNode()) {
+            if (node.getParentNode() && node.getParentNode().getNextNode()) {
+                rootNode = GetLevelNode(node.getParentNode().getNextNode());
+                nextNode=getChildren(rootNode, treeAry);
+                searchContent(treeAry);
+            } else if (node.getParentNode() && !node.getParentNode().getNextNode() && node.getParentNode().level != 0) {
+                rootNode = GetLevelNode(getLastNodeCrossLevel(node.getParentNode()));
+                nextNode=  getChildren(rootNode, treeAry);
+                searchContent(treeAry);
+            } else {
+                return false;
+            }
+        } else {
+            rootNode = GetLevelNode(node.getNextNode());
+            nextNode= getChildren(rootNode, treeAry);
+            searchContent(treeAry);
+        }
+        zTree_Menu.selectNode(nextNode);
+    }
+</SCRIPT>
+<!--中间主体部分 start-->
+<div class="zyycy_middle_wrap w1130" style="padding-top:0; background:none; width:1330px;">
+    <div class="cyyzy_readAll_wrap clearfix">
+        <div class="cyyzy_readAll_left fl">
+            <div class="readAllSetaside fl ">
+                <a href="javascript:;" class="toggleAside"></a>
+                <ul class="readAllUl">
+                    <li class="readAllLi01 curReadLi"><a href="javascript:;">目录</a></li>
+                    <li class="readAllLi02"><a href="javascript:;">查找</a></li>
+                    <li class="readAllLi04"><a href="javascript:;">设置</a></li>
+                </ul>
+            </div>
+            <div class="readAllItemWrap fl" style="overflow-y:hidden">
+                <div class="readAllItems" style="display:block;">
+                    <!--目录-->
+                    <ul id="readBookTree" class="ztree" style="height:700px"></ul>
+                </div>
+                <!--查找-->
+                <div class="readAllItems readAllItems2">
+                    <p class="searchKeywordP">
+                        <input class="inputTxt" type="text" name="KeyValue" id="KeyValue" />
+                        <input class="inputBtn" type="button" value="" onclick="searchWords();" />
+                    </p>
+                    <div id="searchTitle">
+                    </div>
+                </div>
+                <div class="readAllItems readAllItems4">
+                    <a href="javascript:;" class="J_minus">A-</a>
+                    <input type="text" value="24" class="J_input" id="J_input" />
+                    <a href="javascript:;" class="J_add">A+</a>
+                </div>
+            </div>
+        </div>
+        <div class="cyyzy_readAll_right fl">
+            <div class="previousPageWrap fl"><a href="javascript:ZYgetPreNode();" class="previousPageA">上一页</a></div>
+            <div class="pageConWrap fl" style="overflow-y:scroll;background-color:#f6f5ea" id="pageConWrap">
+                <div class="pageReadCon" id="MainContent"></div>
+            </div>
+            <div class="nextPageWrap fl"><a href="javascript:ZYgetNextNode();" class="nextPageA">下一页</a></div>
+        </div>
+        <input type="hidden" id="currentNodeId" />
+    </div>
+</div>
+<!--中间主体部分 end-->
